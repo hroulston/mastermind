@@ -29,7 +29,7 @@ answer = directions.downcase
 
 def set_code
     rand_nums = []
-    while rand_nums.length < 6
+    while rand_nums.length < 4
         rand_num = rand(1..6)
         rand_nums.push rand_num
     end
@@ -51,10 +51,30 @@ def play_game
     while turns <= 12
         puts "Turn ##{turns}: Guess your 4 numbers (1-6)"
         guess = gets.chomp
-        color_change = guess.split("").map{ |num| $number_colors[num]}
-        puts color_change.join(" ")
-        turns +=1
+
+        if guess_valid?(guess) && right_nums?(guess)
+            guess_split = guess.split("")
+            clues = guess_split.map{|num| 
+                int = num.to_i
+                if code.include?(int) && guess_split.index(int) == code.index(int)
+                    "🟣"
+                elsif code.include?(int)
+                    "⚪️"
+                end
+            }
+            # maybe put color change into a method
+            color_change = guess_split.map{|num| $number_colors[num]}
+            puts color_change.join(" ") + "" + clues.join(" ")
+            turns +=1
+        else
+            # later try to extract the coloring into a def and just pass in the string and extrapolate.
+            warning = "\e[31m Please make sure to guess only 4 numbers that are 1-6. \e[0m"
+            puts warning
+            turns = turns
+        end
     end
+    
+    puts code
 
 end
 
