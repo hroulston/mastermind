@@ -56,6 +56,7 @@ def play_game
             guess_split = guess.split("")
             clues = guess_split.map{|num| 
                 int = num.to_i
+                # Make adjustment to logic since purple is not showing
                 if code.include?(int) && guess_split.index(int) == code.index(int)
                     "🟣"
                 elsif code.include?(int)
