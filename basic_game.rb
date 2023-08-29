@@ -1,4 +1,4 @@
-number_colors = 
+$number_colors = 
     {
         "1" => "\e[42m 1 \e[0m",
         "2" => "\e[45m 2 \e[0m",
@@ -18,9 +18,9 @@ end
 
 def directions
 
-    important = "\e[31m There can be duplicates. \e[0m"
+    important = "\e[31m There can be duplicates! \e[0m"
 
-    puts "Welcome to Mastermind! The computer will create a code of numbers 1-6. Your job will be to guess the order of 4 numbers in order to crack the code." + important + "You will be allowed 12 guesses. Clues will be given after each attempt. If you guess the right number in the right location you will be given a 🟣. If you guess the right number in the wrong location you will be given a ⚪️. Ready?"
+    puts "Welcome to Mastermind! The computer will create a code of numbers 1-6. Your job will be to guess the order of 4 numbers so you can crack the code." + important + "You will be allowed 12 guesses. Clues will be given after each attempt. If you guess the right number in the right location you will be given a 🟣. If you guess the right number in the wrong location you will be given a ⚪️. Ready?"
     
     gets.chomp
 end
@@ -36,13 +36,22 @@ def set_code
     rand_nums
 end
 
+def guess_valid?(guess)
+    guess.length == 4
+end
+
+def right_nums?(guess)
+    guess_array = guess.split("")
+    guess_array.all?{|num| /[1-6]/.match(num) }
+end
+
 def play_game
     code = set_code
     turns = 1
     while turns <= 12
-        puts "Turn # #{turn}: Guess your 4 numbers (1-6)"
+        puts "Turn ##{turns}: Guess your 4 numbers (1-6)"
         guess = gets.chomp
-        color_change = guess.split("").map{ |num| number_colors[num]}
+        color_change = guess.split("").map{ |num| $number_colors[num]}
         puts color_change.join(" ")
         turns +=1
     end
