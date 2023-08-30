@@ -56,11 +56,16 @@ def play_game
             guess_split = guess.split("")
             int_guess_split = guess_split.map{|num| num.to_i}
             clues = int_guess_split.map{|num| 
-                # Make adjustment to logic since purple is not showing
-                if code.include?(num) && int_guess_split.index(num) == code.index(num)
+                # Make adjustment to logic since purple is not showing properly
+                # What if each element in guess array is replaced with key word. Then key word ish printed as image. Prevents duplicates and index issue...
+                if int_guess_split == code
+                    puts "Great job! You guessed the code!"
+                elsif code.include?(num) && int_guess_split.index(num) == code.index(num)
                     "🟣"
                 elsif code.include?(num)
                     "⚪️"
+                elsif !code.include?(num)
+                    "○"
                 end
             }
             # maybe put color change into a method
