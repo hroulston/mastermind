@@ -54,18 +54,18 @@ def play_game
 
         if guess_valid?(guess) && right_nums?(guess)
             guess_split = guess.split("")
-            clues = guess_split.map{|num| 
-                int = num.to_i
+            int_guess_split = guess_split.map{|num| num.to_i}
+            clues = int_guess_split.map{|num| 
                 # Make adjustment to logic since purple is not showing
-                if code.include?(int) && guess_split.index(int) == code.index(int)
+                if code.include?(num) && int_guess_split.index(num) == code.index(num)
                     "🟣"
-                elsif code.include?(int)
+                elsif code.include?(num)
                     "⚪️"
                 end
             }
             # maybe put color change into a method
             color_change = guess_split.map{|num| $number_colors[num]}
-            puts color_change.join(" ") + "" + clues.join(" ")
+            puts color_change.join(" ") + " " + clues.join(" ")
             turns +=1
         else
             # later try to extract the coloring into a def and just pass in the string and extrapolate.
