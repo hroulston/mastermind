@@ -7,20 +7,12 @@ $number_colors =
         "5" => "\e[47m 5 \e[0m",
         "6" => "\e[41m 6 \e[0m"   
     }
-
-def clues(guess)
-    {
-        "right" => "🟣",
-        "close" => "⚪️" 
-    }
-    [guess]
-end
-
+    def important (string)
+        "\e[31m #{string} \e[0m"
+    end
 def directions
 
-    important = "\e[31m There can be duplicates! \e[0m"
-
-    puts "Welcome to Mastermind! The computer will create a code of numbers 1-6. Your job will be to guess the order of 4 numbers so you can crack the code." + important + "You will be allowed 12 guesses. Clues will be given after each attempt. If you guess the right number in the right location you will be given a 🟣. If you guess the right number in the wrong location you will be given a ⚪️. Ready?"
+    puts "Welcome to Mastermind! \n\nHow to play: \n* The computer will create a code of numbers 1-6. \n*Your job will be to guess the order of 4 numbers so you can crack the code.\n" + important("There can be duplicates!") + "\n*You will be allowed 12 guesses. \n*Clues will be given after each attempt. \n*If you guess the right number in the right location you will be given a 🟣. \n*If you guess the right number in the wrong location you will be given a ⚪️. \nReady?"
     
     gets.chomp
 end
@@ -69,6 +61,14 @@ def wrong(temp_guess)
     end
 end
 
+def solved?(guess, code)
+    guess == code
+end
+
+def color_change(arr)
+    arr.map{|num| $number_colors[num]}
+end
+
 def play_game
     code = set_code
     turns = 1
@@ -83,7 +83,7 @@ def play_game
             int_guess_split = guess_split.map{|num| num.to_i}
             guess_temp = int_guess_split.clone
             code_temp = code.clone
-            if int_guess_split == code
+            if solved?(int_guess_split, code)
                 puts "Great job! You guessed the code!"
                 break
             elsif 
@@ -93,12 +93,12 @@ def play_game
             end
 
             # maybe put color change into a method
-            color_change = guess_split.map{|num| $number_colors[num]}
+            color_change = color_change(guess_split)
             puts color_change.join(" ") + " " + clues.join(" ")
             turns +=1
         else
             # later try to extract the coloring into a def and just pass in the string and extrapolate.
-            warning = "\e[31m Please make sure to guess only 4 numbers that are 1-6. \e[0m"
+            warning = important("Please make sure to guess only 4 numbers that are 1-6.")
             puts warning
             turns = turns
         end
