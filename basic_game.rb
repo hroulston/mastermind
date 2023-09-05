@@ -104,7 +104,8 @@ def play_game
         end
     end
     
-    puts code
+    code_string = code.map{|num| num.to_s}
+    puts "\n\ncode: #{color_change(code_string).join(" ")}"
 
 end
 
