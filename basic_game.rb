@@ -45,6 +45,30 @@ def right_nums?(guess)
     guess_array.all?{|num| /[1-6]/.match(num) }
 end
 
+def right(temp_code, temp_guess) 
+    temp_guess.each_with_index do |num, indx|
+      next unless num == temp_code[indx]
+         temp_code[indx] = "🟣"
+         temp_guess[indx] = "🟣"
+    end
+end
+
+def close(temp_code, temp_guess)
+    temp_guess.each_with_index do |num, indx|
+        next unless num != "🟣" && temp_code.include?(temp_guess[indx])
+        code_indx = temp_code.find_index(temp_guess[indx])
+        temp_code[code_indx] = "⚪️"
+        temp_guess[indx] = "⚪️"
+    end
+end
+
+def wrong(temp_guess)
+    temp_guess.each_with_index do |num, indx|
+        temp_guess[indx].class == Integer ? temp_guess[indx] = "○" : num
+        temp_guess.shuffle()
+    end
+end
+
 def play_game
     code = set_code
     turns = 1
@@ -53,21 +77,21 @@ def play_game
         guess = gets.chomp
 
         if guess_valid?(guess) && right_nums?(guess)
+            # splits guess into array
             guess_split = guess.split("")
+            # turns guess into integers
             int_guess_split = guess_split.map{|num| num.to_i}
-            clues = int_guess_split.map{|num| 
-                # Make adjustment to logic since purple is not showing properly
-                # What if each element in guess array is replaced with key word. Then key word ish printed as image. Prevents duplicates and index issue...
-                if int_guess_split == code
-                    puts "Great job! You guessed the code!"
-                elsif code.include?(num) && int_guess_split.index(num) == code.index(num)
-                    "🟣"
-                elsif code.include?(num)
-                    "⚪️"
-                elsif !code.include?(num)
-                    "○"
-                end
-            }
+            guess_temp = int_guess_split.clone
+            code_temp = code.clone
+            if int_guess_split == code
+                puts "Great job! You guessed the code!"
+                break
+            elsif 
+                right(code_temp, guess_temp)
+                close(code_temp, guess_temp)
+                clues = wrong(guess_temp).shuffle()
+            end
+
             # maybe put color change into a method
             color_change = guess_split.map{|num| $number_colors[num]}
             puts color_change.join(" ") + " " + clues.join(" ")
